@@ -21,3 +21,7 @@ pip install flask_sqlalchemy
 pip install flask_login     
 pip install werkzeug
 ```
+**First Run will create a new database**
+```
+python main.py
+```
