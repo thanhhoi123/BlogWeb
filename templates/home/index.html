@@ -1,0 +1,162 @@
+
+{% extends "base.html" %} {% block title %}Fakebook{% endblock %} {% block content
+    %}
+    <h1 align="center" style="color: #000000">Posts</h1>
+    {% if user.is_authenticated %}
+    <form method="POST" style="background-color: #3E4042; border-radius: 6px;" enctype="multipart/form-data">
+      <div class="container-cus">
+        <p style="color: #ffffff; font-size:20px; font-weight:bold;">What's up?</p>
+        <textarea name="post" id="post" class="form-control" placeholder="How was your day?" style="max-height: 10px"></textarea>
+        <br />
+        <div class="form-group">
+        <input name="image" type="file" id ="file" style="display: none;">
+          <label for="file">
+            <span class="material-icons">
+              add_photo_alternate
+            </span>
+              Add a photo
+            </label>
+        </div>
+        <div class="button">
+          <button type="submit" class="btn btn-primary" >Post your work</button>
+        </div>
+      </div>
+    </form>
+    {% endif %}
+    <ul class="list-group list-group-flush" id="notes">
+      {% for post in posts %}
+      <li class="list-group-item">
+        <!-- <button type="button" class="close" onClick="deleteNote({{ posts.id }})">
+          <span aria-hidden="true">&times;</span>
+        </button> -->
+        <div class ="card">
+          <img src="/static/{{post.img}}" onerror="this.onerror=null;this.src='/static/default.jpg';" alt="Avatar" style="width:100%; height: 400px;">
+          <div class="container">
+            <div style="margin-top: 2%;"></div>
+              <!-- <button type="button" class="close" onClick="deleteNote({{ posts.id }})">
+                <span aria-hidden="true">&times;</span>
+              </button> -->
+              {% if post.author_id == user.id %}
+              <span><a href="/profile/{{post.author_id}}"  class="link-success" title={{post.author.email}}><b> Your post </b></a></span>
+              {% else %}
+              <span style="color: #ffffff;"><b>Author: </b><a style="color: #ffffff" href="/profile/{{post.author_id}}"  class="link-light" title={{post.author.email}}>{{ post.author.username}}</a></span>
+              {% endif %}
+              {% if post.author_id == user.id %}
+              <!-- <button type="button" class="close" onClick="deleteNote({{ posts.id }})">
+                <span class="material-icons">
+                  settings
+                  </span>
+              </button> -->
+              <div class="btn-group" style="margin-left: 90%;">
+                <button
+                  type="button"
+                  class="btn btn-sm btn-primary dropdown-toggle"
+                  data-bs-toggle="dropdown"
+                ></button>
+                <ul class="dropdown-menu">
+                  <li>
+                    <a href="/delete-post/{{post.id}}" class="dropdown-item">Delete</a>
+                  </li>
+                  <li>
+                    <a href="/edit-post/{{post.id}}" class="dropdown-item">Edit</a>
+                  </li>
+                </ul>
+              </div>
+              {% endif %}
+              <p style="color: #ffffff"><b>Created at: </b>{{post.timestamp.strftime("%c")}}</p>
+              <p style="color: #ffffff">{{ post.body }}</p>
+              <a href="#comments" class="viewbutton" style="color: #b1b8be">Comments</a>
+              <div class="content">
+                <div style="margin-bottom: 10px;"></div>
+                {% if user.is_authenticated %}
+                <form method="POST" action="/create-comment/{{post.id}}">
+                  <textarea name="text" id="post" class="form-control"></textarea>
+                  <br />
+                  <div>
+                    <button type="submit" class="btn btn-primary">Comment</button>
+                  </div>
+                </form>
+                {% endif %}
+                <div style="margin-bottom: 50px;"></div>
+                <hr>
+                <p class="card-text">
+                  {% if post.comments|length > 0 %}
+                  <a data-bs-toggle="collapse" href="#comments-{{post.id}}" role="button">
+                    <small>View {{post.comments|length}} Comments</small>
+                  </a>
+                  {% else %}
+                  <small class="text-muted">No Comments</small>
+                  {% endif %}
+                </p>
+                <div class="collapse" id="comments-{{post.id}}" style="margin-right: 2%;">
+                  <div class="card">
+                    <div class="card-body" id="comments-expanded-{{post.id}}">
+                      {% for comment in post.comments %}
+                      <div class="d-flex justify-content-between align-items-center" style="margin-top: 2px;">
+                        <div style="color: #ffffff;">
+                          <a href="/profile/{{comment.user_id}}"
+                            >{{comment.user_comment.username}}</a
+                          >: {{comment.content}}
+                        </div>
+                        <div>
+                          <small class="text-muted"> {{comment.timestamp.strftime("%c")}}</small>
+                          {% if user.id == comment.user_id or user.id == post.author_id %}
+                          <div class="btn-group">
+                            <button
+                              type="button"
+                              class="btn btn-sm btn-primary dropdown-toggle"
+                              data-bs-toggle="dropdown"
+                            ></button>
+                            <ul class="dropdown-menu">
+                              <li>
+                                <a
+                                  href="/delete-comment/{{comment.id}}"
+                                  class="dropdown-item"
+                                  >Delete</a
+                                >
+                              </li>
+                            </ul>
+                          </div>
+                          {% endif %}
+                        </div>
+                      </div>
+                      {% endfor %}
+                    </div>
+                  </div>
+                </div>  
+              </div>
+          </div>
+      </div>
+      </li>
+      {% endfor %}
+    </ul>
+  {% endblock %}
+  
+  {% block action %}
+  <script>
+    var coll = document.getElementsByClassName("viewbutton");  
+    for (i = 0; i < coll.length; i++) {
+      coll[i].addEventListener("click", function() {
+        this.classList.toggle("active");
+        var content = this.nextElementSibling;
+        if (content.style.display === "block") {
+          content.style.display = "none";
+        } else {
+          content.style.display = "block";
+        }
+      });
+    }
+  
+    var textarea = document.querySelector('textarea');
+  
+    textarea.addEventListener('keydown', autosize);
+                
+    function autosize(){
+      var el = this;
+      setTimeout(function(){
+        el.style.cssText = 'height:auto; padding:0';
+        el.style.cssText = 'height:' + el.scrollHeight + 'px';
+      },0);
+    }
+  </script>
+  {% endblock %}
