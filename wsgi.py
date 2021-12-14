@@ -10,7 +10,7 @@ def page_not_found(e):
     return render_template('404/index.html'), 404
 
 @app.errorhandler(500)
-def page_not_found(e):
+def something_go_wrong(e):
     return render_template('500/index.html'), 500
 
 if __name__ == '__main__':
