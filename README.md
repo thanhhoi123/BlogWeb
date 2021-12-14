@@ -5,6 +5,7 @@ A Social Blogging Application by Multilevel Association team with python
 ***install virtualenv lib***
 ```
 pip install virtualenv
+python -m venv Fakebook
 ```
 ***create Fakebook virtual environment***
 ```
