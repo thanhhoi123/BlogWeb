@@ -37,7 +37,7 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
-VIRTUAL_ENV="E:\2021-hk2\LTPython\code\BTNhom\Python-BackEnd\Fakebook"
+VIRTUAL_ENV="D:\Python\BlogWeb\Fakebook"
 export VIRTUAL_ENV
 
 _OLD_VIRTUAL_PATH="$PATH"
