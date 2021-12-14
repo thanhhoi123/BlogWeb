@@ -1,0 +1,33 @@
+.text-center {
+    text-align: center;
+    background-image: url(https://cdn.dribbble.com/users/285475/screenshots/2083086/dribbble_1.gif);
+    height: 700px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 60%;
+}
+.text-center h1 {
+    margin-top: 100px;
+    margin-bottom: 0;
+    padding-bottom: 0;
+    font-size: 120px;
+}
+       
+.link_404 {      
+    color: #fff!important;
+    padding: 10px 20px;
+    background: #39ac31;
+    margin: 20px 0;
+    display: inline-block;
+}
+
+.contant_box_404 { 
+    margin-top:-50px;
+    text-align: center;
+}
+.contant_box_404 h1 {
+    font-size: 40px;
+}
+.contant_box_404 p {
+    font-size: 25px;
+}
