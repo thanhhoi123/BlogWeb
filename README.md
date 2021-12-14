@@ -24,5 +24,5 @@ pip install werkzeug
 ```
 **First Run will create a new database**
 ```
-python main.py
+python wsgi.py
 ```
